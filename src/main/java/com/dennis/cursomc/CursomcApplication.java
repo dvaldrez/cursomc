@@ -13,6 +13,7 @@ import com.dennis.cursomc.domain.Cidade;
 import com.dennis.cursomc.domain.Cliente;
 import com.dennis.cursomc.domain.Endereco;
 import com.dennis.cursomc.domain.Estado;
+import com.dennis.cursomc.domain.ItemPedido;
 import com.dennis.cursomc.domain.Pagamento;
 import com.dennis.cursomc.domain.PagamentoComBoleto;
 import com.dennis.cursomc.domain.PagamentoComCartao;
@@ -25,6 +26,7 @@ import com.dennis.cursomc.repositories.CidadeRepository;
 import com.dennis.cursomc.repositories.ClienteRepository;
 import com.dennis.cursomc.repositories.EnderecoRepository;
 import com.dennis.cursomc.repositories.EstadoRepository;
+import com.dennis.cursomc.repositories.ItemPedidoRepository;
 import com.dennis.cursomc.repositories.PagamentoRepository;
 import com.dennis.cursomc.repositories.PedidoRepository;
 import com.dennis.cursomc.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -119,6 +124,19 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(ped1,ped2));
 		pagamentoRepository.saveAll(Arrays.asList(pgto1, pagto2));
+		
+		ItemPedido itemPedido = new ItemPedido(ped1, prod1, 0.00, 1, 2000.00);
+		ItemPedido itemPedido2 = new ItemPedido(ped1, prod3, 0.00, 2, 80.00);
+		ItemPedido itemPedido3 = new ItemPedido(ped2, prod2, 100.00, 1, 800.00);
+		
+		ped1.getItens().addAll(Arrays.asList(itemPedido,itemPedido2));
+		ped1.getItens().addAll(Arrays.asList(itemPedido2));
+		
+		prod1.getItens().addAll(Arrays.asList(itemPedido));
+		prod2.getItens().addAll(Arrays.asList(itemPedido3));
+		prod3.getItens().addAll(Arrays.asList(itemPedido2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(itemPedido,itemPedido2,itemPedido3)); 
 		
 	}
 
